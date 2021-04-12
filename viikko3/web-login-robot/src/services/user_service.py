@@ -42,5 +42,24 @@ class UserService:
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
 
+        if len(username) < 3:
+            raise UserInputError(
+            f"Username too short"
+            )
+
+        if len(password) < 8:
+            raise UserInputError(
+            f"Password too short"
+            )
+
+        if password.isalpha():
+            raise UserInputError(
+            f"Password contains only letters"
+            )
+
+        if password != password_confirmation:
+            raise UserInputError(
+            f"Password and password confirmation do not match"
+            )
 
 user_service = UserService()
