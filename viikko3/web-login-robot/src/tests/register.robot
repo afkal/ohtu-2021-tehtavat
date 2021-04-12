@@ -1,5 +1,6 @@
 *** Settings ***
 Resource  resource.robot
+Resource  login_resource.robot
 Suite Setup  Open And Configure Browser
 Suite Teardown  Close Browser
 Test Setup  Create User And Go To Register Page
@@ -35,8 +36,32 @@ Register With Nonmatching Password And Password Confirmation
 
 # Ensimmäisessä testitapauksessa tulee testata,
 # että käyttäjä voi kirjautua sisään onnistuneen
-# rekisteröitymisen jälkeen. Toisessa testitapauksessa taas tulee testata, että käyttäjä ei voi kirjautua sisään epäonnistumiseen rekisteröitymisen jälkeen.
+# rekisteröitymisen jälkeen.
 Login After Successful Registration
+    Set Username  ville
+    Set Password  12345678
+    Set Password Confirmation  12345678
+    Submit User Data
+    Go To Login Page
+    Set Username  ville
+    Set Password  12345678
+    Submit Credentials
+    Login Should Succeed
+
+# Toisessa testitapauksessa taas tulee testata,
+# että käyttäjä ei voi kirjautua sisään epäonnistumiseen
+# rekisteröitymisen jälkeen.
+Login After Failed Registration
+    Set Username  ville
+    Set Password  1234567
+    Set Password Confirmation  1234567
+    Submit User Data
+    Go To Login Page
+    Set Username  ville
+    Set Password  1234567
+    Submit Credentials
+    Login Should Fail With Message  Invalid username or password
+
 
 
 *** Keywords ***

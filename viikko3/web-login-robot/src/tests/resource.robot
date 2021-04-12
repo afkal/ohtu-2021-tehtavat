@@ -28,9 +28,6 @@ Register Page Should Be Open
 Welcome Page Should Be Open
     Title Should Be  Welcome to Ohtu Application!
 
-Go To Login Page
-    Go To  ${LOGIN URL}
-
 Go To Register Page
     Go To  ${REGISTER URL}
 
