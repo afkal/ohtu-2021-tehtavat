@@ -33,6 +33,12 @@ Register With Nonmatching Password And Password Confirmation
     Submit User Data
     Page Should Contain  Password and password confirmation do not match
 
+# Ensimmäisessä testitapauksessa tulee testata,
+# että käyttäjä voi kirjautua sisään onnistuneen
+# rekisteröitymisen jälkeen. Toisessa testitapauksessa taas tulee testata, että käyttäjä ei voi kirjautua sisään epäonnistumiseen rekisteröitymisen jälkeen.
+Login After Successful Registration
+
+
 *** Keywords ***
 Submit User Data
     Click Button  Register

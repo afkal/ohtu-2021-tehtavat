@@ -39,6 +39,11 @@ class UserService:
 
         # toteuta loput tarkastukset tänne ja nosta virhe virhetilanteissa
 
+        if not username.isalpha() or not username.islower():
+            raise UserInputError(
+            f"Username should include only characters between a-z"
+            )
+
         if len(username) < 3:
             raise UserInputError(
             f"Username too short"

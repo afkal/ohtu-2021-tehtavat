@@ -47,6 +47,11 @@ class UserService:
             f"Username too short"
             )
 
+        if not username.isalpha() or not username.islower():
+            raise UserInputError(
+            f"Username should include only characters between a-z"
+            )
+
         if len(password) < 8:
             raise UserInputError(
             f"Password too short"
