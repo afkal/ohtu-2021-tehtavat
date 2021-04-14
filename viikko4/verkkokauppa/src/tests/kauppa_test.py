@@ -102,3 +102,55 @@ class TestKauppa(unittest.TestCase):
 
         # varmistetaan, että metodia tilisiirto on kutsuttu oikeilla parametreilla
         self.pankki_mock.tilisiirto.assert_called_with("pekka", 42, "12345", "33333-44455", 5)
+
+    def test_aloita_asiointi_nollaa_hinnan(self):
+
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 5)
+
+        # nollataan ostoskori
+        self.kauppa.aloita_asiointi()
+        self.kauppa.tilimaksu("pekka", "12345")
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, ANY, ANY, ANY, 0)
+
+    def test_uusi_viitenumero_jokaiselle_maksutapahtumalle(self):
+
+        # määritellään että metodi palauttaa ensimmäisellä kutsulla 1, toisella 2 ja kolmannella 3
+        self.viitegeneraattori_mock.uusi.side_effect = [1, 12, 34]
+
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("pekka", "12345")
+
+        # varmistetaan, että nyt käytössä ensimmäinen viite
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, 1, ANY, ANY, ANY)
+
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.tilimaksu("ville", "54321")
+
+        # varmistetaan, että nyt käytössä toinen viite
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, 12, ANY, ANY, ANY)
+
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(2)
+        self.kauppa.tilimaksu("raimo", "23142")
+
+        # varmistetaan, että nyt käytössä kolmas viite
+        self.pankki_mock.tilisiirto.assert_called_with(ANY, 34, ANY, ANY, ANY)
+
+    def test_poista_korista_palauttaa_varastoon(self):
+
+        # tehdään ostokset
+        self.kauppa.aloita_asiointi()
+        self.kauppa.lisaa_koriin(1)
+        self.kauppa.poista_korista(1)
+
+        # varmistetaan, että varastoon palatusta on kutsuttu oikealla tuotteella
+        self.varasto_mock.palauta_varastoon.assert_called_with(Tuote(1, "maito", 5))
