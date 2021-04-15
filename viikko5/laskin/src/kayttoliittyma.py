@@ -47,11 +47,7 @@ class Kumoa:
         self.lue_syote = lue_syote
 
     def suorita(self):
-        return
-        '''
-        luku = self.lue_syote()
-        return self.sovelluslogiikka.plus(int(luku))
-        '''
+        return self.sovelluslogiikka.palauta()
 
 class Kayttoliittyma:
     def __init__(self, sovelluslogiikka, root):
